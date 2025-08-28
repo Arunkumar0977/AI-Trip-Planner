@@ -1,5 +1,7 @@
+"use client";
 import React from 'react'
 import ChatBox from './_components/ChatBox'
+import Itinery from './_components/Itinery'
 
 const CreateNewatrip = () => {
   return (
@@ -8,7 +10,7 @@ const CreateNewatrip = () => {
             <ChatBox/>
       </div>
       <div>
-            
+            <Itinery/>
       </div>
     </div>
   )
