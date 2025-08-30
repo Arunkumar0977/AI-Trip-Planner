@@ -11,7 +11,7 @@ const PROMPT=`You are an Al Trip Planner Agent. Your goal is to help the user pl
 
 Only ask questions about the following details in order, and wait for the user's answer before asking the next:
 
-1. Starting location (source)
+1. Starting location (origin)
 
 2. Destination city or country
 
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     try{
 
     const completion = await openai.chat.completions.create({
-    model: 'deepseek/deepseek-chat-v3-0324:free',
+    model: 'tngtech/deepseek-r1t2-chimera:free',
     response_format:{type:'json_object'},
     messages: [
         {

@@ -197,7 +197,7 @@ import FinalUi from "./FinalUi";
 import { useMutation } from "convex/react";
 // import * as api from "@/convex/_generated/api";
 import { api } from "@/convex/_generated/api";
-import { useUserDetail } from "@/app/_components/provider";
+import { useTripDetail, useUserDetail } from "@/app/_components/provider";
 import { v4 as uuidv4 } from "uuid";
 import { CreateTripDetail } from "@/convex/tripDetail";
 
@@ -212,9 +212,30 @@ export type TripInfo = {
   destination: string;
   duration: string;
   group_size: string;
-  hotels: any;
-  itinerary: any;
+  origin: string;
+  hotels: Hotel[];
+  itinerary: Itinerary;
 };
+
+export type Hotel={
+  hotel_name: string;
+  hotel_address: string;
+  price_per_night: string;
+  hotel_image_url: string;
+  geo_coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  rating: number;
+  description: string;
+}
+export type Itinerary={
+  day: number;
+  day_plan: string;
+  best_time_to_visit_day: string;
+  activities: any;
+}
+
 
 interface APIResponse {
   resp: string;
@@ -228,6 +249,7 @@ const ChatBox = () => {
   const [loading, setLoading] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
   const [tripDetail, setTripDetail] = useState<TripInfo>();
+  const [tripDetailInfo, setTripDetailInfo] = useTripDetail();
 
   const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
 
@@ -269,6 +291,7 @@ const ChatBox = () => {
         ]);
       } else {
         setTripDetail(data.trip_plan);
+        setTripDetailInfo(data.trip_plan);
         const tripId = uuidv4();
         await SaveTripDetail({
           tripDetail: data.trip_plan,

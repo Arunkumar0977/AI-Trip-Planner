@@ -5,11 +5,11 @@ import Itinery from './_components/Itinery'
 
 const CreateNewatrip = () => {
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 gap-5 p-10'>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-5 p-10'>
       <div>
             <ChatBox/>
       </div>
-      <div>
+      <div className='col-span-2'>
             <Itinery/>
       </div>
     </div>
