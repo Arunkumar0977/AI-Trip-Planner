@@ -3,7 +3,7 @@ import { isSpoofedBot } from "@arcjet/inspect";
 import { NextResponse } from "next/server";
 
 
-const aj = arcjet({
+export const aj = arcjet({
   key: process.env.ARCJET_KEY!, // Get your site key from https://app.arcjet.com
   rules: [
     // Shield protects your app from common attacks e.g. SQL injection
@@ -34,6 +34,7 @@ const aj = arcjet({
 });
 
 export async function GET(req: Request) {
+  const userId="user123"; // Replace with actual user ID from your auth system
   const decision = await aj.protect(req, { requested: 5 }); // Deduct 5 tokens from the bucket
   console.log("Arcjet decision", decision);
 

@@ -228,7 +228,22 @@ export type Hotel={
   };
   rating: number;
   description: string;
-}
+};
+
+type Activity={
+  place_name: string;
+  place_details: string;
+  place_image_url: string;
+  go_ordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  place_address: string;
+  ticket_price: string;
+  time_travel_each_location: string;
+  best_time_to_visit: string;
+};
+
 export type Itinerary={
   day: number;
   day_plan: string;
@@ -249,7 +264,12 @@ const ChatBox = () => {
   const [loading, setLoading] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
   const [tripDetail, setTripDetail] = useState<TripInfo>();
-  const [tripDetailInfo, setTripDetailInfo] = useTripDetail();
+ 
+  // const [tripDetailInfo, setTripDetailInfo] = useTripDetail();
+
+
+const { tripDetailInfo, setTripDetailInfo } = useTripDetail() ?? {};
+
 
   const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
 

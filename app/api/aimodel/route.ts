@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import OpenAI from 'openai';
-
+import { aj } from "../arcjet/route";
+import { currentUser } from "@clerk/nextjs/server";
 export const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -85,7 +86,17 @@ Output Schema:
 
 export async function POST(req: NextRequest) {
     const {messages, isFinal} =await req.json();
-    
+// const user=await currentUser();
+//     const decision = await aj.protect(req, { userId:user?.primaryEmailAddress?.emailAddress??'', requested: 5 });
+//     console.log("Arcjet decision", decision);
+
+//     if (decision.isDenied()) { 
+//       if (decision?.reason?.remaining==0) {
+//         return NextResponse.json({
+//           resp:'Daily limit reached. Please try again later.',
+//           ui:'limit'
+//         })
+//       }
     try{
 
     const completion = await openai.chat.completions.create({

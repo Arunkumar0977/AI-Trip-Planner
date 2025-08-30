@@ -4,7 +4,7 @@ import Image from 'next/image';
 import path from 'path';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { SignInButton } from '@clerk/nextjs';
+import { SignInButton, UserButton } from '@clerk/nextjs';
 import { useUser } from '@clerk/nextjs';
 
 const menuOptions = [
@@ -29,7 +29,7 @@ const {user} = useUser();
       {/*logo*/}
       <div className='flex gap-2 items-center'>
       <Image src={'/logo.svg'} alt='logo' width={30} height={30}/>
-      <h2 className='font-bold'>AI Trip Planner</h2>
+      <h2 className='font-bold'>PLANORA AI</h2>
       </div>
       {/*Menu options*/}
       <div className='flex gap-8 items-center'>
@@ -39,12 +39,16 @@ const {user} = useUser();
             </Link>
         ))}
       </div>
+      <div className='flex gap-4 items-center'>
       {!user? <SignInButton mode='modal'>
       <Button className='bg-blue-800 text-white hover:bg-blue-500 transition'>Get Started</Button>
       </SignInButton>:
       <Link href='/create-new-trip'>
       <Button className='cursor-pointer'>Create New Trip</Button>
-      </Link>}
+      </Link>
+      }
+      <UserButton/>
+      </div>
     </div>
   )
 }
