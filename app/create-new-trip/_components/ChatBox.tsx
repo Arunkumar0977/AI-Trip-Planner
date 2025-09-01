@@ -230,19 +230,19 @@ export type Hotel={
   description: string;
 };
 
-type Activity={
-  place_name: string;
-  place_details: string;
-  place_image_url: string;
-  go_ordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  place_address: string;
-  ticket_price: string;
-  time_travel_each_location: string;
-  best_time_to_visit: string;
-};
+// type Activity={
+//   place_name: string;
+//   place_details: string;
+//   place_image_url: string;
+//   go_ordinates: {
+//     latitude: number;
+//     longitude: number;
+//   };
+//   place_address: string;
+//   ticket_price: string;
+//   time_travel_each_location: string;
+//   best_time_to_visit: string;
+// };
 
 export type Itinerary={
   day: number;
@@ -311,7 +311,7 @@ const { tripDetailInfo, setTripDetailInfo } = useTripDetail() ?? {};
         ]);
       } else {
         setTripDetail(data.trip_plan);
-        setTripDetailInfo(data.trip_plan);
+        setTripDetailInfo(data?.trip_plan);
         const tripId = uuidv4();
         await SaveTripDetail({
           tripDetail: data.trip_plan,

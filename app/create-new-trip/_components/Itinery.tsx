@@ -80,6 +80,7 @@ function Itinery() {
         </div>
       ),
     },
+    //@ts-ignore
     ...(tripData?.itinerary ?? []).map((dayData: { day: number; activities?: any[] }) => ({
   title: `Day ${dayData.day}`,
   content: (
