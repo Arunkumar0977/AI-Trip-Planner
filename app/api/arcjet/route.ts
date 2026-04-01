@@ -49,34 +49,33 @@
 // }
 
 
-
 import arcjet, { detectBot, shield, tokenBucket } from "@arcjet/next";
 import { isSpoofedBot } from "@arcjet/inspect";
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ keep it non-exported
-const aj = arcjet({
-  key: process.env.ARCJET_KEY || "", // ✅ safer (prevents build crash)
-  rules: [
-    shield({ mode: "LIVE" }),
-
-    detectBot({
-      mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE"],
-    }),
-
-    tokenBucket({
-      mode: "LIVE",
-      characteristics: ["userId"],
-      refillRate: 5,
-      interval: 10, // seconds
-      capacity: 30,
-    }),
-  ],
-});
-
 export async function GET(req: NextRequest) {
   try {
+    // ✅ Initialize inside the handler to avoid module-level export conflicts
+    const aj = arcjet({
+      key: process.env.ARCJET_KEY || "",
+      rules: [
+        shield({ mode: "LIVE" }),
+
+        detectBot({
+          mode: "LIVE",
+          allow: ["CATEGORY:SEARCH_ENGINE"],
+        }),
+
+        tokenBucket({
+          mode: "LIVE",
+          characteristics: ["userId"],
+          refillRate: 5,
+          interval: 10,
+          capacity: 30,
+        }),
+      ],
+    });
+
     const userId = "user123"; // 🔥 replace with real user later
 
     // ✅ Arcjet protection
