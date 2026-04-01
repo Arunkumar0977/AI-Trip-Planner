@@ -50,56 +50,65 @@
 
 
 
-
 import arcjet, { detectBot, shield, tokenBucket } from "@arcjet/next";
 import { isSpoofedBot } from "@arcjet/inspect";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-// ❌ removed "export"
+// ✅ keep it non-exported
 const aj = arcjet({
-  key: process.env.ARCJET_KEY!, 
+  key: process.env.ARCJET_KEY || "", // ✅ safer (prevents build crash)
   rules: [
     shield({ mode: "LIVE" }),
 
     detectBot({
       mode: "LIVE",
-      allow: [
-        "CATEGORY:SEARCH_ENGINE",
-      ],
+      allow: ["CATEGORY:SEARCH_ENGINE"],
     }),
 
     tokenBucket({
       mode: "LIVE",
       characteristics: ["userId"],
       refillRate: 5,
-      interval: 10, // ⚠️ FIX: interval is in seconds, not ms
+      interval: 10, // seconds
       capacity: 30,
     }),
   ],
 });
 
-export async function GET(req: Request) {
-  const userId = "user123";
+export async function GET(req: NextRequest) {
+  try {
+    const userId = "user123"; // 🔥 replace with real user later
 
-  const decision = await aj.protect(req, {
-    userId,
-    requested: 1, // ⚠️ FIX: should be small (tokens consumed per request)
-  });
+    // ✅ Arcjet protection
+    const decision = await aj.protect(req, {
+      userId,
+      requested: 1,
+    });
 
-  // Optional extra bot spoof protection
-  // if (isSpoofedBot(req)) {
-  //   return NextResponse.json(
-  //     { error: "Spoofed bot detected" },
-  //     { status: 403 }
-  //   );
-  // }
+    // ✅ Extra spoofed bot protection
+    if (isSpoofedBot(req)) {
+      return NextResponse.json(
+        { error: "Spoofed bot detected" },
+        { status: 403 }
+      );
+    }
 
-  if (decision.isDenied()) {
+    // ✅ Rate limit / block handling
+    if (decision.isDenied()) {
+      return NextResponse.json(
+        { error: "Too Many Requests", reason: decision.reason },
+        { status: 429 }
+      );
+    }
+
+    return NextResponse.json({ message: "Hello world" });
+
+  } catch (err) {
+    console.error("Arcjet Error:", err);
+
     return NextResponse.json(
-      { error: "Too Many Requests", reason: decision.reason },
-      { status: 429 }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json({ message: "Hello world" });
 }
