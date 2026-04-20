@@ -1,7 +1,6 @@
 "use client";
 import React, { use } from 'react'
 import Image from 'next/image';
-import path from 'path';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { SignInButton, UserButton } from '@clerk/nextjs';
